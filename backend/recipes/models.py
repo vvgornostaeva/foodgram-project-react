@@ -45,12 +45,12 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Тэг'
         verbose_name_plural = 'Тэги'
-        constraints = (
+        constraints = [
             models.UniqueConstraint(
-                fields=('name', 'color', 'slug'),
+                fields=['name', 'color', 'slug'],
                 name='unique_tags',
             )
-        )
+        ]
 
     def __str__(self) -> str:
         return self.name
@@ -76,7 +76,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         'Картинка',
-        upload_to='recipe/',
+        upload_to='recipes/',
 
     )
     cooking_time = models.PositiveSmallIntegerField(
@@ -149,7 +149,7 @@ class IngredientInRecipe(models.Model):
         verbose_name_plural = 'Количество ингредиентов в рецепте'
         constraints = [
             models.UniqueConstraint(
-                fields=('recipe', 'ingredient'),
+                fields=['recipe', 'ingredient'],
                 name='unique_ingredient_for_recipe'
             )
         ]
@@ -184,7 +184,7 @@ class Subscription(models.Model):
         ordering = ('-created_at',)
         constraints = [
             models.UniqueConstraint(
-                fields=('user', 'author'),
+                fields=['user', 'author'],
                 name='unique_subscription'
             )
         ]
@@ -213,7 +213,7 @@ class Favorite(models.Model):
         verbose_name_plural = 'Избранное'
         constraints = [
             models.UniqueConstraint(
-                fields=('user', 'recipe'),
+                fields=['user', 'recipe'],
                 name='unique_fav_connection'
             )
         ]
@@ -242,7 +242,7 @@ class ShoppingCart(models.Model):
         verbose_name_plural = 'Списки покупок'
         constraints = [
             models.UniqueConstraint(
-                fields=('user', 'recipe'),
+                fields=['user', 'recipe'],
                 name='unique_shopping_cart'
             )
         ]
