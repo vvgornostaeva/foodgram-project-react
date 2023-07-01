@@ -1,6 +1,4 @@
-from django.db.models import Sum, F
-from django.shortcuts import HttpResponse, get_object_or_404
-
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from rest_framework import mixins, permissions, status, viewsets
@@ -17,8 +15,8 @@ from api.serializers import (FavoriteSerializer, IngredientSerializer,
                              ShoppingCartSerialiser,
                              SubscriptionSerializer)
 
-from api.utils import delete_instance, post_instance
-from recipes.models import (Favorite, Ingredient, IngredientInRecipe,
+from api.utils import delete_instance, post_instance, create_shopping_cart
+from recipes.models import (Favorite, Ingredient,
                             Recipe, ShoppingCart,
                             Subscription, Tag)
 from users.models import User
@@ -110,35 +108,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
         """Метод определения сериализатора."""
         if self.action in ('create', 'update', 'partial_update'):
             return RecipeCreateSerializer
-        else:
-            return RecipeSerializer
+        return RecipeSerializer
 
     @action(detail=False, methods=['get'],
             permission_classes=[permissions.IsAuthenticated])
     def download_shopping_cart(self, request):
         """Метод отправления txt файла со списком покупок."""
-        ingredients = IngredientInRecipe.objects.select_related(
-            'recipe', 'ingredient'
-        )
-        ingredients = ingredients.filter(
-            recipe__shopping_cart__user=request.user
-        ).values(
-            'ingredient__name',
-            'ingredient__measurement_unit'
-        ).annotate(
-            name=F('ingredient__name'),
-            unit=F('ingredient__measurement_unit'),
-            ingredient_amount=Sum('amount'),)
-        shopping_list = ['Список покупок:\n']
-        for ingredient in ingredients:
-            shopping_list.append(
-                f"{ingredient['name']} - {ingredient['ingredient_amount']}"
-                f"{ingredient['unit']};\n"
-            )
-        response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = \
-            'attachment; filename="shopping_cart.txt"'
-        return response
+        return create_shopping_cart(request)
 
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[permissions.IsAuthenticated])
@@ -147,12 +123,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, id=pk)
         if request.method == 'POST':
             return post_instance(request, recipe, FavoriteSerializer)
-        if request.method == 'DELETE':
-            error_message = ('Ошибка удаления из избранного. '
-                             'Рецепта нет в избранном')
-            success_message = 'Рецепт успешно удален из избранного'
-            return delete_instance(request, Favorite, recipe, error_message,
-                                   success_message)
+        error_message = ('Ошибка удаления из избранного. '
+                         'Рецепта нет в избранном')
+        success_message = 'Рецепт успешно удален из избранного'
+        return delete_instance(request, Favorite, recipe, error_message,
+                               success_message)
 
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[permissions.IsAuthenticated])
@@ -161,9 +136,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, id=pk)
         if request.method == 'POST':
             return post_instance(request, recipe, ShoppingCartSerialiser)
-        if request.method == 'DELETE':
-            error_message = ('Ошибка удаления из списка покупок. '
-                             'Рецепта нет в списке покупок')
-            success_message = 'Рецепт успешно удален из списка покупок'
-            return delete_instance(request, ShoppingCart, recipe,
-                                   error_message, success_message)
+        error_message = ('Ошибка удаления из списка покупок. '
+                         'Рецепта нет в списке покупок')
+        success_message = 'Рецепт успешно удален из списка покупок'
+        return delete_instance(request, ShoppingCart, recipe,
+                               error_message, success_message)
