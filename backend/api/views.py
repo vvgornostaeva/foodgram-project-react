@@ -5,18 +5,24 @@ from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import IsSuperUserAdminAuthorOrReadOnly
-from api.serializers import (FavoriteSerializer, IngredientSerializer,
-                             RecipeCreateSerializer, RecipeSerializer,
+from api.serializers import (FavoriteSerializer,
+                             IngredientSerializer,
+                             RecipeCreateSerializer,
+                             RecipeSerializer,
                              ShoppingCartSerialiser,
                              SubscriptionCreateSerializer,
-                             SubscriptionSerializer, TagSerializer,
+                             SubscriptionSerializer,
+                             TagSerializer,
                              UserCreateSerializer)
 from api.utils import create_shopping_cart, delete_instance, post_instance
-from recipes.models import (Favorite, Ingredient, Recipe, ShoppingCart,
-                            Subscription, Tag)
+from recipes.models import (Favorite,
+                            Ingredient,
+                            Recipe,
+                            ShoppingCart,
+                            Subscription,
+                            Tag)
 from users.models import User
 
 
