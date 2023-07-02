@@ -106,7 +106,7 @@ sudo docker compose exec backend python manage.py import_csv
 
 ### Тестовые пользователи
 Логин: ```vikaadmin``` (суперюзер)  
-Email: ```vvgornostaeva@mail.ru``  
+Email: ```vvgornostaeva@mail.ru``` 
 Пароль: ```123456```  
 
 Логин: ```vasilinapupkina```  
