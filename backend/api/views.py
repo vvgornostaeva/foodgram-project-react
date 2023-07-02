@@ -1,24 +1,21 @@
 from django.shortcuts import get_object_or_404
-
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import IsSuperUserAdminAuthorOrReadOnly
 from api.serializers import (FavoriteSerializer, IngredientSerializer,
                              RecipeCreateSerializer, RecipeSerializer,
-                             UserCreateSerializer, TagSerializer,
-                             SubscriptionCreateSerializer,
                              ShoppingCartSerialiser,
-                             SubscriptionSerializer)
-
-from api.utils import delete_instance, post_instance, create_shopping_cart
-from recipes.models import (Favorite, Ingredient,
-                            Recipe, ShoppingCart,
+                             SubscriptionCreateSerializer,
+                             SubscriptionSerializer, TagSerializer,
+                             UserCreateSerializer)
+from api.utils import create_shopping_cart, delete_instance, post_instance
+from recipes.models import (Favorite, Ingredient, Recipe, ShoppingCart,
                             Subscription, Tag)
 from users.models import User
 

@@ -1,4 +1,4 @@
-from django.db.models import Sum, F
+from django.db.models import F, Sum
 from django.shortcuts import HttpResponse
 from rest_framework import status
 from rest_framework.response import Response
