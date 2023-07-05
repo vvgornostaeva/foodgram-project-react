@@ -66,7 +66,15 @@ class Recipe(models.Model):
     )
     name = models.CharField(
         'Название рецепта',
-        max_length=200)
+        max_length=200,
+        validators=[
+            validators.RegexValidator(
+                regex='^.*[а-яА-Я]+.*$',
+                message='Название рецепта не должно состоять только '
+                        'из символов и цифр!'
+            )
+        ],
+    )
     text = models.TextField(
         'Описание рецепта'
     )
