@@ -68,7 +68,11 @@ class Recipe(models.Model):
         'Название рецепта',
         max_length=200,
         validators=[
-            validators.RegexValidator(r'^[А-Яа-яЁё]+$',)
+            validators.RegexValidator(
+                regex=r'^[А-Яа-яЁё][а-яё\s_-]+$',
+                message='Проверьте, что название начинается с буквы и '
+                        'и не содержит иных символов, кроме дефиса '
+                        'нижнего подчеркивания и пробела')
         ]
     )
     text = models.TextField(
