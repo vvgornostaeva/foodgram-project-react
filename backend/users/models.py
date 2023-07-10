@@ -1,6 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from users.constants import (FIRST_NAME_MAX_LENGTH,
+                             LAST_NAME_MAX_LENGTH,
+                             USERNAME_MAX_LENGTH)
 
 class User(AbstractUser):
     """Кастомная модель пользователя."""
@@ -10,16 +13,16 @@ class User(AbstractUser):
     )
     username = models.CharField(
         'Уникальный юзернейм',
-        max_length=150,
+        max_length=USERNAME_MAX_LENGTH,
         unique=True,
     )
     first_name = models.CharField(
         'Имя',
-        max_length=150
+        max_length=FIRST_NAME_MAX_LENGTH
     )
     last_name = models.CharField(
         'Фамилия',
-        max_length=150
+        max_length=LAST_NAME_MAX_LENGTH
     )
 
     USERNAME_FIELD = 'email'

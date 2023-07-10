@@ -8,7 +8,9 @@ from rest_framework.validators import UniqueTogetherValidator
 
 from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingCart, Subscription, Tag)
+from recipes.constants import MAX_INGREDIENT_AMOUNT, MIN_INGREDIENT_AMOUNT
 from users.models import User
+
 
 
 class UserSerializer(UserSerializer):
@@ -59,7 +61,9 @@ class IngredientinRecipeCreateSerializer(ModelSerializer):
         source='ingredient',
         queryset=Ingredient.objects.all()
     )
-    amount = serializers.IntegerField(write_only=True, min_value=1)
+    amount = serializers.IntegerField(write_only=True, 
+                                      min_value=MIN_INGREDIENT_AMOUNT,
+                                      max_value=MAX_INGREDIENT_AMOUNT)
 
     class Meta:
         model = IngredientInRecipe
