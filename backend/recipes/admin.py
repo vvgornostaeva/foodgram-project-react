@@ -26,7 +26,6 @@ class RecipeAdmin(admin.ModelAdmin):
     def count_favorites(self, obj):
         """"Метод подсчета количества добавлений в избранное."""
         return Favorite.objects.filter(recipe=obj).count()
-#   count_favorites.short_description = 'Количество добавлений в избранное'
 
 
 @admin.register(Ingredient)

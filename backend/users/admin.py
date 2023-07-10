@@ -15,13 +15,9 @@ class MyUserAdmin(UserAdmin):
     @admin_display(short_description='Количество подписок',)
     def count_subscriptions(self, obj):
         """"Метод подсчета количества подписок."""
-        user = User.objects.filter(id=obj.id)
-        return user.follower.count()
-#    count_subscriptions.short_description = 'Количество подписок'
+        return User.objects.get(id=obj.id).follower.count()
 
     @admin_display(short_description='Количество рецептов',)
     def count_recipes(self, obj):
         """"Метод подсчета количества рецептов."""
-        user = User.objects.filter(id=obj.id)
-        return user.recipes.count()
-#    count_recipes.short_description = 'Количество рецептов'
+        return User.objects.get(id=obj.id).recipes.count()
