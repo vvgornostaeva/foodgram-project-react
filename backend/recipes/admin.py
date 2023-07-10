@@ -40,7 +40,6 @@ class IngredientAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Subscription)
 admin.site.register(Favorite)
 admin.site.register(Tag)
