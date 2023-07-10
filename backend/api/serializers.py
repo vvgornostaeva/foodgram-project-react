@@ -60,7 +60,7 @@ class IngredientinRecipeCreateSerializer(ModelSerializer):
         source='ingredient',
         queryset=Ingredient.objects.all()
     )
-    amount = serializers.IntegerField(write_only=True, 
+    amount = serializers.IntegerField(write_only=True,
                                       min_value=MIN_INGREDIENT_AMOUNT,
                                       max_value=MAX_INGREDIENT_AMOUNT)
 
