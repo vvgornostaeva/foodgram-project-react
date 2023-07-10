@@ -6,11 +6,10 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import UniqueTogetherValidator
 
+from recipes.constants import MAX_INGREDIENT_AMOUNT, MIN_INGREDIENT_AMOUNT
 from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingCart, Subscription, Tag)
-from recipes.constants import MAX_INGREDIENT_AMOUNT, MIN_INGREDIENT_AMOUNT
 from users.models import User
-
 
 
 class UserSerializer(UserSerializer):
