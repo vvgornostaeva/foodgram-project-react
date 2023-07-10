@@ -12,7 +12,7 @@ from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
 from users.models import User
 
 
-class UserSerializer(UserSerializer):
+class CustomUserSerializer(UserSerializer):
     """Сериализатор для модели User при чтении данных."""
     is_subscribed = serializers.SerializerMethodField()
 
@@ -31,7 +31,7 @@ class UserSerializer(UserSerializer):
                                            ).exists()
 
 
-class UserCreateSerializer(UserCreateSerializer, UserSerializer):
+class CustomUserCreateSerializer(UserCreateSerializer):
     """Сериализатор для модели User при записи данных."""
 
     class Meta:
@@ -86,7 +86,7 @@ class IngredientInRecipeSerializer(ModelSerializer):
 
 class RecipeSerializer(ModelSerializer):
     """Сериализатор для модели Recipe при чтении данных."""
-    author = UserSerializer(read_only=True)
+    author = CustomUserSerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     ingredients = IngredientInRecipeSerializer(
         source='total_ingredients', read_only=True, many=True)
@@ -130,7 +130,7 @@ class ShortRecipeSerializer(ModelSerializer):
 class RecipeCreateSerializer(ModelSerializer):
     """Сериализатор модели Recipe при записи данных."""
     ingredients = IngredientinRecipeCreateSerializer(many=True)
-    author = UserSerializer(read_only=True)
+    author = CustomUserSerializer(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
         many=True
@@ -204,7 +204,7 @@ class RecipeCreateSerializer(ModelSerializer):
         ).data
 
 
-class SubscriptionSerializer(UserSerializer):
+class SubscriptionSerializer(CustomUserSerializer):
     """Сериализатор для модели Subscription при чтении данных."""
 
     recipes = serializers.SerializerMethodField()
@@ -233,14 +233,6 @@ class SubscriptionSerializer(UserSerializer):
     def get_recipes_count(self, obj):
         """Метод для получения количества рецептов."""
         return obj.recipes.count()
-
-    def get_is_subscribed(self, obj):
-        """Метод проверки подписан ли пользователь."""
-        user = self.context.get('request').user
-        if user.is_anonymous:
-            return False
-        return Subscription.objects.filter(user=user, author__id=obj.id
-                                           ).exists()
 
 
 class SubscriptionCreateSerializer(ModelSerializer):
