@@ -34,7 +34,7 @@ def create_shopping_cart(request):
         'recipe', 'ingredient'
     )
     ingredients = ingredients.filter(
-        recipe__shopping_cart__user=request.user
+        recipe__shoppingcart_related__user=request.user
     ).values(
         'ingredient__name',
         'ingredient__measurement_unit'

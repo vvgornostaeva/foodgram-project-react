@@ -24,13 +24,15 @@ class RecipeFilter(FilterSet):
     def get_is_favorited(self, queryset, name, value):
         """Метод для получения queryset избранных рецептов."""
         if self.request.user.is_authenticated and value:
-            return queryset.filter(favorites__user=self.request.user)
+            return queryset.filter(favorite_related__user=self.request.user)
         return queryset
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         """Метод для получения queryset списка покупок."""
         if self.request.user.is_authenticated and value:
-            return queryset.filter(shopping_cart__user=self.request.user)
+            return queryset.filter(
+                shoppingcart_related__user=self.request.user
+            )
         return queryset
 
 

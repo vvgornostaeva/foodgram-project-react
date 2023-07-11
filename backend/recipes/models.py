@@ -213,59 +213,47 @@ class Subscription(models.Model):
         return f'{self.user} подписан(а) на {self.author}'
 
 
-class Favorite(models.Model):
-    """Модель для избранных рецептов."""
+class BaseFavShopCart(models.Model):
+    """Абстрактный класс для моделей Favorite и ShoppingCart."""
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='favorites',
-        verbose_name='Пользователь'
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name='favorites',
-        verbose_name='Рецепт'
-    )
-
-    class Meta:
-        verbose_name = 'Избранное'
-        verbose_name_plural = 'Избранное'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'recipe'],
-                name='unique_fav_connection'
-            )
-        ]
-
-    def __str__(self):
-        return f'{self.user} добавил в избранное {self.recipe}'
-
-
-class ShoppingCart(models.Model):
-    """Модель списка покупок."""
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='shopping_cart',
+        related_name='%(class)s_related',
         verbose_name='Пользователь',
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='shopping_cart',
+        related_name='%(class)s_related',
         verbose_name='Рецепт',
     )
 
     class Meta:
-        verbose_name = 'Список покупок'
-        verbose_name_plural = 'Списки покупок'
+        abstract = True
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
-                name='unique_shopping_cart'
+                name='unique_user_recipe_connection'
             )
         ]
+
+
+class Favorite(BaseFavShopCart):
+    """Модель для избранных рецептов."""
+
+    class Meta:
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранное'
+
+    def __str__(self):
+        return f'{self.user} добавил в избранное {self.recipe}'
+
+
+class ShoppingCart(BaseFavShopCart):
+    """Модель списка покупок."""
+    class Meta:
+        verbose_name = 'Список покупок'
+        verbose_name_plural = 'Списки покупок'
 
     def __str__(self):
         return f'{self.user} добавил в список покупок {self.recipe}'
