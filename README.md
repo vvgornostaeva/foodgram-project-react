@@ -117,7 +117,5 @@ Email: ```pupkina@mail.ru```
 Email: ```vpupkin@yandex.ru```  
 Пароль: ```qwerty12345666```
 
-### Ссылка на сайт, развернутый на сервере:
-##### [foodgram](https://recipefoodgram.ddns.net/)
 ### Автор проекта:
 ##### [Виктория Горностаева](https://github.com/vvgornostaeva)
